@@ -1,0 +1,44 @@
+.data
+	
+.text
+.globl main
+main:
+
+buscar_categoria:
+	la		$s2							#load do array
+	
+loop:	
+	jal		comparar
+	beq		$v0,1,categoria_igual		#se retornar 1, significa que o elemento possui a mesma categoria procurada
+	
+	addi								#incrementar posicao do array
+	j		loop
+	
+categoria_igual:
+	sw
+	j loop
+	
+comparar:
+	sw									#armazenar o ra
+
+    lb      $t0,($s2)                   #recebe o proximo caracter da str1
+    lb      $t1,($s3)                   #recebe o proximo caracter da str1
+    bne     $t0,$t1,diferente           #compara para ver se s?diferentes
+
+    beq     $t0,$zero,igual             #Se chegou no final da string
+
+    addi    $s2,$s2,1                   #apontar para o proximo caracter
+    addi    $s3,$s3,1                   #apontar para o proximo caracter
+    j       comparar
+
+#string diferentes 
+diferente:
+	lw
+	add		$v0,$zero,$zero				#'0' significa strings diferentes
+    jr     	$ra
+
+#strings iguais
+igual:
+	lw
+   	add	$v0,$zero,1					#'1' significa strings iguais
+    jr     	$ra
